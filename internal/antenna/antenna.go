@@ -33,6 +33,7 @@ func MakeSet(antennas ...*SlotAntenna) *AntennaSet {
 }
 
 func (as *AntennaSet) Marshal(ind int) ([]byte, error) {
+	ind = as.len*(int(math.Abs(float64(ind)))/as.len+1) + ind
 	ind = ind % as.len
 	b, err := json.Marshal(as.antennas[ind])
 	if err != nil {
@@ -70,7 +71,6 @@ func computeDegs(xM, yM, xE, yE [][]complex128) ([][]float64, [][]float64) {
 	for i := 0; i < len(xM); i++ {
 		md[i], ed[i] = make([]float64, len(xM[0])), make([]float64, len(xM[0]))
 		for j := 0; j < len(xM[0]); j++ {
-			//md[i][j], ed[i][j] = getDeg(imag(xM[i][j]), imag(yM[i][j])), getDeg(imag(xE[i][j]), imag(yE[i][j]))
 			md[i][j], ed[i][j] = getDeg(real(xM[i][j]), real(yM[i][j])), getDeg(real(xE[i][j]), real(yE[i][j]))
 		}
 	}

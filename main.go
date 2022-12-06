@@ -55,11 +55,12 @@ func wwwHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	set := antenna.MakeSet(antenna.NewSlotAntenna(11, 61, 81, 0.23, 0.01),
+	set := antenna.MakeSet(
+		antenna.NewSlotAntenna(15, 61, 81, 0.31, 0.01),
+		antenna.NewSlotAntenna(11, 61, 81, 0.23, 0.01),
 		antenna.NewSlotAntenna(5, 61, 81, 0.22, 0.01),
-		antenna.NewSlotAntenna(5, 61, 81, 0.055, 0.01),
 		antenna.NewSlotAntenna(5, 61, 81, 0.11, 0.01),
-		antenna.NewSlotAntenna(50, 101, 131, 0.11, 0.001))
+		antenna.NewSlotAntenna(51, 101, 131, 0.11, 0.001))
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/").Subrouter()
 
