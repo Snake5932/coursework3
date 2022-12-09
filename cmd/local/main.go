@@ -10,7 +10,6 @@ import (
 )
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	//http.ServeFile(w, r, "/srv/coursework/web/index.html")
 	http.ServeFile(w, r, "web/index.html")
 }
 
@@ -58,38 +57,17 @@ func main() {
 	set := antenna.MakeSet(
 		antenna.NewSlotAntenna(15, 61, 81, 0.31, 0.01),
 		antenna.NewSlotAntenna(11, 61, 81, 0.23, 0.01),
-		antenna.NewSlotAntenna(5, 61, 81, 0.22, 0.01),
-		antenna.NewSlotAntenna(5, 61, 81, 0.11, 0.01),
-		antenna.NewSlotAntenna(51, 101, 131, 0.11, 0.001))
+		antenna.NewSlotAntenna(5, 61, 81, 0.11, 0.01))
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/").Subrouter()
-
-	//api.HandleFunc("/get_antenna/{ind}", makePhysicsHandler(set)).Host("www.shtjnk.ru").Methods("GET")
 
 	api.HandleFunc("/get_antenna/{ind}", makePhysicsHandler(set)).Methods("GET")
 
 	static := r.PathPrefix("/static/")
-	/*fileServer := http.FileServer(http.Dir("/srv/coursework/web/static"))
-	static.Handler(http.StripPrefix("/static", fileServerMiddleware(fileServer))).Host("www.shtjnk.ru")
-	r.HandleFunc("/", mainHandler).Host("www.shtjnk.ru").Methods("GET")
-	r.HandleFunc("/", wwwHandler).Host("shtjnk.ru").Methods("GET")*/
 
 	fileServer := http.FileServer(http.Dir("web/static"))
 	static.Handler(http.StripPrefix("/static", fileServerMiddleware(fileServer)))
 	r.HandleFunc("/", mainHandler).Methods("GET")
-
-	/*cert, _ := tls.X509KeyPair([]byte(certs.CertChain), []byte(certs.Key))
-	server := http.Server{
-		Addr:      "185.188.183.121:443",
-		Handler:   r,
-		TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
-	}
-	go func() {
-		if err := http.ListenAndServe("185.188.183.121:80", http.HandlerFunc(redirectToTls)); err != nil {
-			log.Fatalf("ListenAndServe error: %v", err)
-		}
-	}()
-	err := server.ListenAndServeTLS("", "")*/
 
 	server := http.Server{
 		Addr:    "localhost:8081",
